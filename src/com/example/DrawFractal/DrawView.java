@@ -34,7 +34,7 @@ public class DrawView extends View {
 
     private void firstLine(Canvas canvas) {
         int startX = parameters[0] / 2;
-        int startY = parameters[1] / 2;
+        int startY = parameters[1] / 2-100;
         Point firstPoint = new Point(startX, startY);
         Point firstPointEnd = new Point(startX, (int) (startY * 1.5));
         canvas.drawLine(firstPoint.x, firstPoint.y, firstPointEnd.x, firstPointEnd.y, paint);

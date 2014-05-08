@@ -9,17 +9,13 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 
 public class MainActivity extends Activity {
-    Button buttonStart;
-    EditText editText;
     LinearLayout container;
     int parameters[];
     InputMethodManager inputManager;
+    SeekBar seekbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,34 +25,37 @@ public class MainActivity extends Activity {
     }
 
     private void initialization() {
-        buttonStart = (Button) findViewById(R.id.buttonStart);
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start();
-            }
-        });
-        editText = (EditText) findViewById(R.id.editText);
         container = (LinearLayout) findViewById(R.id.container);
         parameters = new int[3];
         getParameters();
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        seekbar = (SeekBar) findViewById(R.id.seekBar);
+        seekbar.setMax(8);
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                clear();
+                if (seekBar.getProgress() >=1){
+                    parameters[2] = seekBar.getProgress();
+                    container.addView(new DrawView(getApplicationContext(), parameters));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
-    private void start() {
-        String getFromEditText = editText.getText().toString();
-        if (getFromEditText.length() > 0 && getFromEditText.length() < 3 && Integer.parseInt(getFromEditText) != 0) {
-            if (container.getRootView() != null) {
-                container.removeAllViewsInLayout();
-            }
-            parameters[2] = Integer.parseInt(getFromEditText);
-            container.addView(new DrawView(getApplicationContext(), parameters));
-            editText.setText("");
-            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        } else {
-            editText.setText("");
-            Toast.makeText(getApplicationContext(), "input from 1 to 99", Toast.LENGTH_SHORT).show();
+    private void clear(){
+        if (container.getRootView() != null) {
+            container.removeAllViewsInLayout();
         }
     }
 
