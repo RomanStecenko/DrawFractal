@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 
     private void start() {
         String getFromEditText = editText.getText().toString();
-        if (getFromEditText.length() == 1 && Integer.parseInt(getFromEditText) != 0) {
+        if (getFromEditText.length() > 0 && getFromEditText.length() < 3 && Integer.parseInt(getFromEditText) != 0) {
             if (container.getRootView() != null) {
                 container.removeAllViewsInLayout();
             }
@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
                     InputMethodManager.HIDE_NOT_ALWAYS);
         } else {
             editText.setText("");
-            Toast.makeText(getApplicationContext(), "from 1 to 9 only", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "input from 1 to 99", Toast.LENGTH_SHORT).show();
         }
     }
 

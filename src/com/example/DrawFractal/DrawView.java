@@ -43,6 +43,7 @@ public class DrawView extends View {
 
     private void fractal(Canvas canvas, int number, Point point, int distance) {
         if (number == parameters[2]) return;
+        if (distance == 0) return;
         number++;
         Point nextPoint1 = new Point();
         Point nextPoint2 = new Point();
