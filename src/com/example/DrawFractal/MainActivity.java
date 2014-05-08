@@ -2,12 +2,13 @@ package com.example.DrawFractal;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,15 +17,18 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     Button buttonStart;
     EditText editText;
-    int number;
     LinearLayout container;
     int parameters[];
+    InputMethodManager inputManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        initialization();
+    }
 
+    private void initialization() {
         buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,26 +38,25 @@ public class MainActivity extends Activity {
         });
         editText = (EditText) findViewById(R.id.editText);
         container = (LinearLayout) findViewById(R.id.container);
-        parameters= new int[3];
+        parameters = new int[3];
+        getParameters();
+        inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     private void start() {
-        if (editText.getText().toString().length() > 0 && TextUtils.isDigitsOnly(editText.getText().toString().trim())) {
-            number = Integer.parseInt(editText.getText().toString().trim());
-            if (number > 0 && number < 10) {
-                if (container.getRootView() != null) {
-                    container.removeAllViewsInLayout();
-                }
-                getParameters();
-                container.addView(new DrawView(getApplicationContext(), parameters));
-                editText.setText("");
-            } else {
-                editText.setText("");
-                Toast.makeText(getApplicationContext(), "from 1 to 9 only", Toast.LENGTH_SHORT).show();
+        String getFromEditText = editText.getText().toString();
+        if (getFromEditText.length() == 1 && Integer.parseInt(getFromEditText) != 0) {
+            if (container.getRootView() != null) {
+                container.removeAllViewsInLayout();
             }
+            parameters[2] = Integer.parseInt(getFromEditText);
+            container.addView(new DrawView(getApplicationContext(), parameters));
+            editText.setText("");
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
         } else {
             editText.setText("");
-            Toast.makeText(getApplicationContext(), "only integers", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "from 1 to 9 only", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -71,7 +74,6 @@ public class MainActivity extends Activity {
             parameters[0] = size.x;
             parameters[1] = size.y;
         }
-        parameters[2]= number;
     }
 
 }

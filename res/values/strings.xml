@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">DrawFractal</string>
     <string name="start">Start</string>
+    <string name="editText">Input integer value</string>
 </resources>
